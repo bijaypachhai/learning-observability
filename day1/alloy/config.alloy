@@ -1,0 +1,25 @@
+// Scrape Prometheus-format metrics from the apps and remote-write to Mimir.
+prometheus.scrape "apps" {
+  targets = [
+    { __address__ = "api:8080",    job = "api"    },
+    { __address__ = "worker:9464", job = "worker" },
+  ]
+  forward_to = [prometheus.remote_write.mimir.receiver]
+}
+
+prometheus.remote_write "mimir" {
+  endpoint { url = "http://mimir:9009/api/v1/push" }
+}
+
+// Pull continuous profiles from the apps' pprof endpoints into Pyroscope.
+pyroscope.scrape "apps" {
+  targets = [
+    { __address__ = "api:8080",    service_name = "api"    },
+    { __address__ = "worker:9464", service_name = "worker" },
+  ]
+  forward_to = [pyroscope.write.local.receiver]
+}
+
+pyroscope.write "local" {
+  endpoint { url = "http://pyroscope:4040" }
+}

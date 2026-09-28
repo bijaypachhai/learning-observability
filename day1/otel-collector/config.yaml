@@ -1,0 +1,34 @@
+receivers:
+  otlp:
+    protocols:
+      grpc: { endpoint: 0.0.0.0:4317 }
+      http: { endpoint: 0.0.0.0:4318 }
+
+processors:
+  batch: {}
+
+exporters:
+  otlp/tempo: # traces → Tempo (OTLP gRPC)
+    endpoint: tempo:4317
+    tls: { insecure: true }
+  otlphttp/loki: # logs → Loki (OTLP ingest)
+    endpoint: http://loki:3100/otlp
+  otlphttp/mimir: # metrics → Mimir remote-write (OTLP)
+    endpoint: http://mimir:9009/otlp
+  prometheus: # metrics → scrapeable by Prometheus
+    endpoint: 0.0.0.0:9464
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlp/tempo]
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlphttp/loki]
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlphttp/mimir, prometheus]

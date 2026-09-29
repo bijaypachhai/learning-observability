@@ -1,0 +1,32 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: prometheus
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  - job_name: api
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["api:8080"]
+        labels:
+          service: orders-api
+
+  - job_name: worker
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["worker:9464"] # OTel Prometheus exporter port
+
+remote_write:
+  - url: http://mimir:9009/api/v1/push
+    # Add X-Scope-OrgID header so that Mimir knows what tenant the remote write data should be stored in.
+    # In this case, our tenant is "demo"
+    headers:
+      X-Scope-OrgID: api
+  - url: http://mimir:9009/api/v1/push
+    # Add X-Scope-OrgID header so that Mimir knows what tenant the remote write data should be stored in.
+    # In this case, our tenant is "demo"
+    headers:
+      X-Scope-OrgID: worker

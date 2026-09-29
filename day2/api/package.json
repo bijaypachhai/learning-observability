@@ -1,0 +1,19 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "@aws-sdk/client-sns": "^3.658.0",
+    "@aws-sdk/client-sqs": "^3.658.0",
+    "@aws-sdk/client-s3": "^3.658.0",
+    "@opentelemetry/sdk-node": "^0.53.0",
+    "@opentelemetry/auto-instrumentations-node": "^0.50.0",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.53.0",
+    "@opentelemetry/exporter-prometheus": "^0.53.0",
+    "prom-client": "^15.0.0"
+  }
+}

@@ -1,0 +1,5 @@
+node_modules/
+
+3461928#3461928: *16552936 an upstream response is buffered to a temporary file /var/lib/nginx/proxy/2/47/0000014472
+ while reading upstream, client: 34.22.134.170, server: admin.example.sg, request: "GET /admin/strapi-vpDIzUhi.js HTTP/1.1", 
+upstream: "http://127.0.0.1:1337/admin/strapi-vpDIzUhi.js", host: "n8n.example.sg"
